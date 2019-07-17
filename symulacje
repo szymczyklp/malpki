@@ -1,0 +1,58 @@
+nps_liczba_2018<-c(141, 55, 108, 105, 592, 399, 892, 1581, 912, 2642)
+
+nps_freq<-nps_liczba_2018/sum(nps_liczba_2018)
+
+nps<-(sum(nps_liczba_2018[9:10])-sum(nps_liczba_2018[1:6]))/sum(nps_liczba_2018)
+
+
+npsy<-numeric()
+npsy_roznica<-numeric()
+
+
+for(i in 1:100)
+{
+proba <- sample(size = 600, x = seq(1, 10, 1), prob = nps_freq, replace = TRUE)
+
+nps_proba<-sum(ifelse(proba%in%c(9, 10), 1, 0)-ifelse(proba%in%seq(1, 6, 1), 1, 0))/length(proba)
+
+nps_roznica<-nps_proba-nps
+
+npsy[i]<-nps_proba
+npsy_roznica[i]<-abs(nps_roznica)
+
+
+}
+
+
+
+round(summary(npsy_roznica), 2)
+
+#wersja2
+
+npsy2<-numeric()
+npsy_roznica2<-numeric()
+
+
+for(i in 1:100)
+{
+  proba <- sample(size = 4500000, x = seq(1, 10, 1), prob = nps_freq, replace = TRUE)
+  
+  proba2<-sample(size = 600, x = proba, prob = rep(1/length(proba), length(proba)))
+  
+  nps_proba2<-sum(ifelse(proba2%in%c(9, 10), 1, 0)-ifelse(proba2%in%seq(1, 6, 1), 1, 0))/length(proba2)
+  
+  nps_roznica2<-nps_proba2-nps
+  
+  npsy2[i]<-nps_proba2
+  npsy_roznica2[i]<-abs(nps_roznica2)
+  
+  
+}
+
+round(summary(npsy_roznica2), 2)
+
+
+t.test(npsy_roznica, npsy_roznica2)
+
+mean(npsy_roznica)
+mean(npsy_roznica2)
